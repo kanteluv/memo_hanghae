@@ -49,10 +49,10 @@ public class MemoService {
     }
 
     @Transactional
-    public MemoResponseDto<MemoRequestDto> delete(Long id, String pwd) {
+    public MemoResponseDto<MemoRequestDto> delete(Long id, MemoRequestDto requestDto) {
         Memo memo = memoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("아이디가 존재하지 않아요"));
 
-        if (memo.getPwd().equals(pwd)) {
+        if (memo.getPwd().equals(requestDto.getPwd())) {
             memoRepository.deleteById(id);
             return MemoResponseDto.Success(null);
         } else {

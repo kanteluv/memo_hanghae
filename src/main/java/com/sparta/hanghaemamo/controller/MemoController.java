@@ -43,7 +43,7 @@ public class MemoController {
 
     @DeleteMapping("/api/memos/{id}")
     public MemoResponseDto<MemoRequestDto> deleteMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
-        return memoService.delete(id, requestDto.getPwd());
+        return memoService.delete(id, requestDto);
     }
 
 }
