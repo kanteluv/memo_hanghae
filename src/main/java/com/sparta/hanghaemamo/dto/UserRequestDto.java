@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class MemoRequestDto {
+public class UserRequestDto {
     private String username;
-    private String contents;
-    private String contentName;
-    private String pwd;
+    private String password;
 }
