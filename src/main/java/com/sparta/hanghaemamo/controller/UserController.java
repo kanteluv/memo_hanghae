@@ -1,58 +1,30 @@
 package com.sparta.hanghaemamo.controller;
 
-
 import com.sparta.hanghaemamo.dto.UserRequestDto;
 import com.sparta.hanghaemamo.dto.UserResponseDto;
 import com.sparta.hanghaemamo.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 
 import javax.servlet.http.HttpServletResponse;
 
-@Controller
-@RequiredArgsConstructor
+@RestController
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-
     private final UserService userService;
 
-    @GetMapping("/signup")
-    public ModelAndView signupPage() {
-        return new ModelAndView("signup");
-    }
-
     @PostMapping("/signup")
-    public UserResponseDto signup(@RequestBody UserRequestDto userRequestDto) {
-        return userService.signup(userRequestDto);
-
+    public UserResponseDto signup(@RequestBody UserRequestDto requestDto) {
+        return userService.signup(requestDto);
     }
 
-//    @PostMapping("/signup")
-//    public UserResponseDto<UserRequestDto> signup(@RequestBody UserRequestDto userRequestDto) {
-//        userService.signup(userRequestDto);
-////        return "redirect:/login";
-//        return userService.signup(userRequestDto);
-//    }
-
-    @GetMapping("/login")
-    public ModelAndView loginPage() {
-        return new ModelAndView("login");
-    }
-
-    @ResponseBody
     @PostMapping("/login")
-    public String login(@RequestBody UserRequestDto userRequestDto, HttpServletResponse response) {
-        userService.login(userRequestDto, response);
-        return "success";
+    public UserResponseDto login(@RequestBody UserRequestDto requestDto, HttpServletResponse response) {
+        return userService.login(requestDto, response);
     }
-
-//    @ResponseBody
-//    @PostMapping("/user/login")
-//    public UserResponseDto<UserRequestDto> login(@RequestBody UserRequestDto userRequestDto, HttpServletResponse response) {
-//        return userService.login(userRequestDto, response);
-//    }
-
 }
