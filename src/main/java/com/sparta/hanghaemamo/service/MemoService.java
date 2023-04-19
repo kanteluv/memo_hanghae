@@ -7,6 +7,7 @@ import com.sparta.hanghaemamo.repository.MemoRepository;
 import com.sparta.hanghaemamo.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemoService {
     private final MemoRepository memoRepository;
@@ -26,11 +28,10 @@ public class MemoService {
         Claims test = jwtUtil.getUserInfoFromToken(chkToken);
         memo.setUsername(test.getSubject());
 
-        if(jwtUtil.validateToken(chkToken)) {
+        if (jwtUtil.validateToken(chkToken)) {
             memoRepository.save(memo);
             return MemoResponseDto.Success(memo);
-        }
-        else
+        } else
             return MemoResponseDto.False();
     }
 
@@ -73,6 +74,7 @@ public class MemoService {
         }
     }
 
+
     @Transactional
     public MemoResponseDto<MemoRequestDto> delete(Long id, HttpServletRequest request) {
         try {
@@ -99,5 +101,6 @@ public class MemoService {
             return MemoResponseDto.False();
         }
     }
+
 
 }

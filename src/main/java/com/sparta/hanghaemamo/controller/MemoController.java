@@ -42,8 +42,7 @@ public class MemoController {
     }
 
     @DeleteMapping("/memos/{id}")
-    public MemoResponseDto<MemoRequestDto> deleteMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto, HttpServletRequest request) {
+    public MemoResponseDto<MemoRequestDto> deleteMemo(@PathVariable Long id, HttpServletRequest request) {
         return memoService.delete(id, request);
     }
-
 }

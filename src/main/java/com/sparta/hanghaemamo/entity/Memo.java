@@ -3,11 +3,13 @@ package com.sparta.hanghaemamo.entity;
 import com.sparta.hanghaemamo.dto.MemoRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
 @Entity
+@Setter
 @NoArgsConstructor
 public class Memo extends Timestamped {
     @Id
@@ -36,6 +38,5 @@ public class Memo extends Timestamped {
         this.contents = memoRequestDto.getContents();
         this.contentName = memoRequestDto.getContentName();
     }
-
 
 }
