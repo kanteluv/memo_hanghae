@@ -2,13 +2,10 @@ package com.sparta.hanghaemamo.controller;
 
 import com.sparta.hanghaemamo.dto.MemoRequestDto;
 import com.sparta.hanghaemamo.dto.MemoResponseDto;
-import com.sparta.hanghaemamo.entity.Memo;
 import com.sparta.hanghaemamo.service.MemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
