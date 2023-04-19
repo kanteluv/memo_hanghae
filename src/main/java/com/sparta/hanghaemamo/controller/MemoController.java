@@ -30,7 +30,6 @@ public class MemoController {
         return memoService.getMemos();
     }
 
-
     @GetMapping("/memos/{id}")
     public MemoResponseDto<MemoRequestDto> searchMemos(@PathVariable Long id) {
         return memoService.searchMemos(id);

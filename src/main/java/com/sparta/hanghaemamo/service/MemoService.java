@@ -66,14 +66,12 @@ public class MemoService {
                     }
                 }
             }
-
             return MemoResponseDto.False();
 
         } catch (NullPointerException e) {
             return MemoResponseDto.False();
         }
     }
-
 
     @Transactional
     public MemoResponseDto<MemoRequestDto> delete(Long id, HttpServletRequest request) {
@@ -101,6 +99,4 @@ public class MemoService {
             return MemoResponseDto.False();
         }
     }
-
-
 }
