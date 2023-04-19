@@ -27,7 +27,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseDto signup(@Valid  @RequestBody UserRequestDto requestDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            StringBuilder sb = new StringBuilder()
+            StringBuilder sb = new StringBuilder();
             for(FieldError fieldError: bindingResult.getFieldErrors()) {
              sb.append(fieldError.getDefaultMessage());
             }
