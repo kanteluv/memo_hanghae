@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequiredArgsConstructor
 public class MemoController {
@@ -18,8 +20,8 @@ public class MemoController {
     }
 
     @PostMapping("/api/memos")
-    public MemoResponseDto<MemoRequestDto> createMemo(@RequestBody MemoRequestDto requestDto) {
-        return memoService.createMemo(requestDto);
+    public MemoResponseDto<MemoRequestDto> createMemo(@RequestBody MemoRequestDto requestDto, HttpServletRequest request) {
+        return memoService.createMemo(requestDto, request);
     }
 
     @GetMapping("/api/memos")
@@ -34,13 +36,12 @@ public class MemoController {
     }
 
     @PutMapping("/api/memos/{id}")
-    public MemoResponseDto<MemoRequestDto> updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
-        return memoService.update(id, requestDto);
+    public MemoResponseDto<MemoRequestDto> updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto, HttpServletRequest request) {
+        return memoService.update(id, requestDto, request);
     }
 
-    @DeleteMapping("/api/memos/{id}")
-    public MemoResponseDto<MemoRequestDto> deleteMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
-        return memoService.delete(id, requestDto);
-    }
-
+//    @DeleteMapping("/api/memos/{id}")
+//    public MemoResponseDto<MemoRequestDto> deleteMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
+//        return memoService.delete(id, requestDto);
+//    }
 }
