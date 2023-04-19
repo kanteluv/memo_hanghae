@@ -18,14 +18,17 @@ public class UserService {
     private final  UserRepository userRepository;
     private final JwtUtil jwtUtil;
 
+
     public UserResponseDto signup(UserRequestDto requestDto) {
         Optional<User> found = userRepository.findById(requestDto.getUsername());
+
         if (found.isPresent()) {
             return new UserResponseDto("실패", HttpStatus.BAD_REQUEST);
         }
 
         User user = new User(requestDto);
         userRepository.save(user);
+
         return new UserResponseDto("성공", HttpStatus.OK);
     }
 
@@ -34,6 +37,7 @@ public class UserService {
             User user = userRepository.findById(requestDto.getUsername()).orElseThrow(
                     () -> new IllegalArgumentException("없는 ID 입니다.")
             );
+
 
             if (requestDto.getPassword().equals(user.getPassword())) {
                 response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername()));

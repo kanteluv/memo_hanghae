@@ -2,7 +2,6 @@ package com.sparta.hanghaemamo.util;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +22,7 @@ public class JwtUtil {
     // Header 의 Key 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
     // Token 식별자
-    private static final String BEARER_PREFIX = "Bearer ";
+    public static final String BEARER_PREFIX = "Bearer ";
     // 토큰 만료시간
     private static final long TOKEN_TIME = 60 * 60 * 1000L;
 
