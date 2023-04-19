@@ -1,6 +1,5 @@
 package com.sparta.hanghaemamo.dto;
 
-import com.sun.istack.NotNull;
 import lombok.*;
 
 @Data

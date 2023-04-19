@@ -5,8 +5,6 @@ import com.sparta.hanghaemamo.dto.UserRequestDto;
 import com.sparta.hanghaemamo.dto.UserResponseDto;
 import com.sparta.hanghaemamo.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -41,11 +39,5 @@ public class UserController {
         userService.login(userRequestDto, response);
         return "success";
     }
-
-//    @ResponseBody
-//    @PostMapping("/user/login")
-//    public UserResponseDto<UserRequestDto> login(@RequestBody UserRequestDto userRequestDto, HttpServletResponse response) {
-//        return userService.login(userRequestDto, response);
-//    }
 
 }

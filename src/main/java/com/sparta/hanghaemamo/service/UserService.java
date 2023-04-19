@@ -42,7 +42,6 @@ public class UserService {
         userRepository.save(user);
 
         UserResponseDto userResponseDto = new UserResponseDto("Success", HttpStatus.OK);
-//        userResponseDto.setData(HttpStatus.OK);
 
         return userResponseDto;
     }

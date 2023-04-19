@@ -2,15 +2,12 @@ package com.sparta.hanghaemamo.controller;
 
 import com.sparta.hanghaemamo.dto.MemoRequestDto;
 import com.sparta.hanghaemamo.dto.MemoResponseDto;
-import com.sparta.hanghaemamo.entity.Memo;
 import com.sparta.hanghaemamo.service.MemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,13 +37,13 @@ public class MemoController {
     }
 
     @PutMapping("/memos/{id}")
-    public MemoResponseDto<MemoRequestDto> updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
-        return memoService.update(id, requestDto);
+    public MemoResponseDto<MemoRequestDto> updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto, HttpServletRequest request) {
+        return memoService.update(id, requestDto, request);
     }
 
     @DeleteMapping("/memos/{id}")
-    public MemoResponseDto<MemoRequestDto> deleteMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
-        return memoService.delete(id, requestDto);
+    public MemoResponseDto<MemoRequestDto> deleteMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto, HttpServletRequest request) {
+        return memoService.delete(id, request);
     }
 
 }
