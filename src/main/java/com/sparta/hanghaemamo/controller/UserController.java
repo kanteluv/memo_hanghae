@@ -5,6 +5,7 @@ import com.sparta.hanghaemamo.dto.UserRequestDto;
 import com.sparta.hanghaemamo.dto.UserResponseDto;
 import com.sparta.hanghaemamo.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,10 +25,17 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public String signup(UserRequestDto userRequestDto) {
-        userService.signup(userRequestDto);
-        return "redirect:/user/login";
+    public UserResponseDto signup(@RequestBody UserRequestDto userRequestDto) {
+        return userService.signup(userRequestDto);
+
     }
+
+//    @PostMapping("/signup")
+//    public UserResponseDto<UserRequestDto> signup(@RequestBody UserRequestDto userRequestDto) {
+//        userService.signup(userRequestDto);
+////        return "redirect:/login";
+//        return userService.signup(userRequestDto);
+//    }
 
     @GetMapping("/login")
     public ModelAndView loginPage() {

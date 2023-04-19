@@ -8,7 +8,9 @@ import com.sparta.hanghaemamo.entity.User;
 
 //import com.sparta.hanghaemamo.jwt.JwtUtil;
 import com.sparta.hanghaemamo.repository.UserRepository;
+import com.sparta.hanghaemamo.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,10 +25,10 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-//    private final JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     @Transactional
-    public void signup(UserRequestDto userRequestDto) {
+    public UserResponseDto signup(UserRequestDto userRequestDto) {
         String username = userRequestDto.getUsername();
         String password = userRequestDto.getPassword();
 
@@ -38,6 +40,11 @@ public class UserService {
 
         User user = new User(userRequestDto);
         userRepository.save(user);
+
+        UserResponseDto userResponseDto = new UserResponseDto("Success", HttpStatus.OK);
+//        userResponseDto.setData(HttpStatus.OK);
+
+        return userResponseDto;
     }
 
 //    @Transactional(readOnly = true)
@@ -60,6 +67,25 @@ public class UserService {
 //        return UserResponseDto.Success(user);
 //    }
 
+
+//    @Transactional
+//    public UserResponseDto<UserRequestDto> signup(UserRequestDto userRequestDto) {
+//        String username = userRequestDto.getUsername();
+//        String password = userRequestDto.getPassword();
+//
+//        // 회원 중복 확인
+//        Optional<User> found = userRepository.findByUsername(username);
+//        if (found.isPresent()) {
+//            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+//        }
+//
+//        User user = new User(userRequestDto);
+//        userRepository.save(user);
+//
+//        return UserResponseDto.
+//    }
+
+
     @Transactional(readOnly = true)
     public void login(UserRequestDto requestDto, HttpServletResponse response) {
         String username = requestDto.getUsername();
@@ -75,7 +101,7 @@ public class UserService {
         }
 
         //JWT
-    //        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername()));
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername()));
 
     }
 }

@@ -1,16 +1,12 @@
 package com.sparta.hanghaemamo.dto;
 
 import com.sun.istack.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserRequestDto {
-    @NotNull
     private String username;
-    @NotNull
     private String password;
 }
