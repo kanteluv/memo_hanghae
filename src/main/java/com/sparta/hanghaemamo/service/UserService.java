@@ -47,47 +47,9 @@ public class UserService {
         return userResponseDto;
     }
 
-//    @Transactional(readOnly = true)
-//    public UserResponseDto<UserRequestDto> login(UserRequestDto requestDto, HttpServletResponse response) {
-//        String username = requestDto.getUsername();
-//        String password = requestDto.getPassword();
-//
-//        // 사용자 확인
-//        User user = userRepository.findByUsername(username).orElseThrow(
-//                () -> new IllegalArgumentException("등록된 사용자가 없습니다.")
-//        );
-//        // 비밀번호 확인
-//        if(!user.getPassword().equals(password)){
-//            throw  new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-//        }
-//
-//        //JWT
-////        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername()));
-//
-//        return UserResponseDto.Success(user);
-//    }
-
-
-//    @Transactional
-//    public UserResponseDto<UserRequestDto> signup(UserRequestDto userRequestDto) {
-//        String username = userRequestDto.getUsername();
-//        String password = userRequestDto.getPassword();
-//
-//        // 회원 중복 확인
-//        Optional<User> found = userRepository.findByUsername(username);
-//        if (found.isPresent()) {
-//            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
-//        }
-//
-//        User user = new User(userRequestDto);
-//        userRepository.save(user);
-//
-//        return UserResponseDto.
-//    }
-
 
     @Transactional(readOnly = true)
-    public void login(UserRequestDto requestDto, HttpServletResponse response) {
+    public UserResponseDto login(UserRequestDto requestDto, HttpServletResponse response) {
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
 
@@ -102,6 +64,9 @@ public class UserService {
 
         //JWT
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername()));
+        UserResponseDto userResponseDto = new UserResponseDto("Success", HttpStatus.OK);
+
+        return userResponseDto;
 
     }
 }

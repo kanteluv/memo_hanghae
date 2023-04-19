@@ -23,21 +23,25 @@ public class Memo extends Timestamped {
     @Column(nullable = false)
     private String contentName;
 
-    @Column(nullable = false)
-    private String pwd;
+//    @Column(nullable = false)
+//    private String pwd;
 
     public Memo(MemoRequestDto requestDto) {
-        this.username = requestDto.getUsername();
+//        this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
         this.contentName = requestDto.getContentName();
-        this.pwd = requestDto.getPwd();
+//        this.pwd = requestDto.getPwd();
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void update(MemoRequestDto memoRequestDto) {
-        this.username = memoRequestDto.getUsername();
+//        this.username = memoRequestDto.getUsername();
         this.contents = memoRequestDto.getContents();
         this.contentName = memoRequestDto.getContentName();
-        this.pwd = memoRequestDto.getPwd();
+//        this.pwd = memoRequestDto.getPwd();
     }
 
 

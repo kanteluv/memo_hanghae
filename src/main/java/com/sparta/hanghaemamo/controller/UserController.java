@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
@@ -29,13 +29,6 @@ public class UserController {
         return userService.signup(userRequestDto);
 
     }
-
-//    @PostMapping("/signup")
-//    public UserResponseDto<UserRequestDto> signup(@RequestBody UserRequestDto userRequestDto) {
-//        userService.signup(userRequestDto);
-////        return "redirect:/login";
-//        return userService.signup(userRequestDto);
-//    }
 
     @GetMapping("/login")
     public ModelAndView loginPage() {

@@ -8,10 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class MemoController {
 
     private final MemoService memoService;
@@ -20,28 +23,28 @@ public class MemoController {
         return new ModelAndView("index");
     }
 
-    @PostMapping("/api/memos")
-    public MemoResponseDto<MemoRequestDto> createMemo(@RequestBody MemoRequestDto requestDto) {
-        return memoService.createMemo(requestDto);
+    @PostMapping("/memos")
+    public MemoResponseDto<MemoRequestDto> createMemo(@RequestBody MemoRequestDto requestDto, HttpServletRequest request) {
+        return memoService.createMemo(requestDto, request);
     }
 
-    @GetMapping("/api/memos")
+    @GetMapping("/memos")
     public MemoResponseDto<MemoRequestDto> getMemos() {
         return memoService.getMemos();
     }
 
 
-    @GetMapping("/api/memos/{id}")
+    @GetMapping("/memos/{id}")
     public MemoResponseDto<MemoRequestDto> searchMemos(@PathVariable Long id) {
         return memoService.searchMemos(id);
     }
 
-    @PutMapping("/api/memos/{id}")
+    @PutMapping("/memos/{id}")
     public MemoResponseDto<MemoRequestDto> updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
         return memoService.update(id, requestDto);
     }
 
-    @DeleteMapping("/api/memos/{id}")
+    @DeleteMapping("/memos/{id}")
     public MemoResponseDto<MemoRequestDto> deleteMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto) {
         return memoService.delete(id, requestDto);
     }
