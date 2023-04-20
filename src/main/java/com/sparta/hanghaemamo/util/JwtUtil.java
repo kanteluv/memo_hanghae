@@ -31,6 +31,8 @@ public class JwtUtil {
     private Key key;
     private final SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
+    //PostConstruct  - 왜 어노테이션쓰면서까지 초기화하는가? 상수로 그냥 안하는 이유?
+    //초기화 비용관련 시점
     @PostConstruct // 의존성 주입 후 바로 초기화
     public void init() {
         byte[] bytes = Base64.getDecoder().decode(secretKey);

@@ -31,7 +31,6 @@ public class UserController {
             for(FieldError fieldError: bindingResult.getFieldErrors()) {
              sb.append(fieldError.getDefaultMessage());
             }
-//            sb.deleteCharAt(sb.length()-2);
             return new ResponseDto(sb.toString(), HttpStatus.BAD_REQUEST);
         }
 

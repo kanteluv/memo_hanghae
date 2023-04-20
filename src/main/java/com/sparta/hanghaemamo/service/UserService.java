@@ -22,7 +22,7 @@ public class UserService {
         Optional<User> found = userRepository.findById(requestDto.getUsername());
 
         if (found.isPresent()) {
-            return new ResponseDto("실패", HttpStatus.BAD_REQUEST);
+            return new ResponseDto("아이디 중복", HttpStatus.BAD_REQUEST);
         }
 
         User user = new User(requestDto);

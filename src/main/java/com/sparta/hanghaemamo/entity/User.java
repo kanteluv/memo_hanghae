@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Getter
 @Entity(name="USERS")
 @Table(name="USERS")
-@NoArgsConstructor
+@NoArgsConstructor         //프록시관련하여 저걸 쓴다함
 public class User extends Timestamped {
     @Id
     @Column(nullable = false)

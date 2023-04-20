@@ -21,6 +21,12 @@ public class MemoService {
     private final MemoRepository memoRepository;
     private final JwtUtil jwtUtil;
 
+
+    //서비스 -> 서버로 가는 dto
+    //클라이언트 로 응답하는 dto 분리하면 좋을거같다
+    //제너릭 <?> 이면 컴파일시에 맞는 타입 체크를 못하기때문에 의미가 없다
+    //엔티티가 리턴되고 있는데 open session in view 의 관점에서 생각해보라
+    //entity -> dto 로 검색해보자
     @Transactional
     public MemoResponseDto<MemoRequestDto> createMemo(MemoRequestDto requestDto, HttpServletRequest request) {
         Memo memo = new Memo(requestDto);
