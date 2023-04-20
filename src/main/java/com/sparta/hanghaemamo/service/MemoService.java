@@ -26,7 +26,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemoService {
     private final MemoRepository memoRepository;
-    private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     public static final String AUTHORIZATION_KEY = "auth";
     public static final String SUBJECT_KEY = "sub";
