@@ -56,11 +56,11 @@ public class JwtUtil {
     // JWT 생성하기
     public String createToken(String username, UserRoleEnum role) {
         Date date = new Date();
-        Map<String, Object> createClaims = createClaims(username, role);
 
         return BEARER_PREFIX
                 + Jwts.builder()
-                .claim(AUTHORIZATION_KEY, createClaims)
+                .setSubject(username)
+                .claim(AUTHORIZATION_KEY, role)
                 .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                 .signWith(key, signatureAlgorithm)
                 .compact();
@@ -81,13 +81,6 @@ public class JwtUtil {
             log.info("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
         }
         return false;
-    }
-
-    private Map<String, Object> createClaims(String username, UserRoleEnum role) { // payload
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("username", username);
-        claims.put("role", role);
-        return claims;
     }
 
     // JWT 에서 사용자 정보 가져오기(먼저 유효성 검사 후에 사용해야 합니다)

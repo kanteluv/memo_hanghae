@@ -2,6 +2,7 @@ package com.sparta.hanghaemamo.service;
 
 import com.sparta.hanghaemamo.dto.MemoRequestDto;
 import com.sparta.hanghaemamo.dto.MemoResponseDto;
+import com.sparta.hanghaemamo.dto.ResponseDto;
 import com.sparta.hanghaemamo.entity.Memo;
 import com.sparta.hanghaemamo.entity.User;
 import com.sparta.hanghaemamo.entity.UserRoleEnum;
@@ -11,6 +12,7 @@ import com.sparta.hanghaemamo.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
@@ -27,6 +29,7 @@ public class MemoService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     public static final String AUTHORIZATION_KEY = "auth";
+    public static final String SUBJECT_KEY = "sub";
 
 
     //서비스 -> 서버로 가는 dto
@@ -62,33 +65,30 @@ public class MemoService {
 
     @Transactional
     public MemoResponseDto<MemoRequestDto> update(Long id, MemoRequestDto requestDto, HttpServletRequest request) {
+        boolean chk_dto = false;
         try {
             Memo memo = memoRepository.findById(id).orElseThrow(
                     () -> new NullPointerException("존재하지 않는 게시글입니다.")
             );
-
             String token = jwtUtil.resolveToken(request);
-            Map<String, Object> claimMap = jwtUtil.createClaims(memo);
 
             if (token != null) {
                 if (jwtUtil.validateToken(token)) {
-                    claims = jwtUtil.getUserInfoFromToken(token);
-                    if (StringUtils.equals(memo.getUsername(), id)) {
-                        // StringUtils.equals를 쓴 이유는 Null-safe하게 사용하기 위해서 -> Java가 잘못함
-
+                    Claims claims = jwtUtil.getUserInfoFromToken(token);
+                    String username = claims.get(SUBJECT_KEY, String.class);
+                    String role = claims.get(AUTHORIZATION_KEY, String.class);
+                    if (role == UserRoleEnum.USER.name()) {
+                        if (StringUtils.equals(memo.getUsername(), username)) {
+                            // StringUtils.equals를 쓴 이유는 Null-safe하게 사용하기 위해서 -> Java가 잘못함
+                            memo.update(requestDto);
+                            return MemoResponseDto.Success(memo);
+                        }
+                    } else {
                         memo.update(requestDto);
                         return MemoResponseDto.Success(memo);
                     }
-                    User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
-                            () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
-                    );
-
-                    // 사용자 권한 가져와서 ADMIN 이면 전체 조회, USER 면 본인이 추가한 부분 조회
-                    UserRoleEnum userRoleEnum = user.getRole();
-                    System.out.println("role = " + userRoleEnum);
                 }
             }
-
             return MemoResponseDto.False();
 
         } catch (NullPointerException e) {
@@ -97,29 +97,33 @@ public class MemoService {
     }
 
     @Transactional
-    public MemoResponseDto<MemoRequestDto> delete(Long id, HttpServletRequest request) {
+    public ResponseDto delete(Long id, HttpServletRequest request) {
         try {
             Memo memo = memoRepository.findById(id).orElseThrow(
                     () -> new NullPointerException("존재하지 않는 게시글입니다.")
             );
 
             String token = jwtUtil.resolveToken(request);
-            Claims claims;
 
             if (token != null) {
                 if (jwtUtil.validateToken(token)) {
-                    claims = jwtUtil.getUserInfoFromToken(token);
-                    if (memo.getUsername().equals(claims.getSubject())) {
+                    Claims claims = jwtUtil.getUserInfoFromToken(token);
+                    String username = claims.get(SUBJECT_KEY, String.class);
+                    String role = claims.get(AUTHORIZATION_KEY, String.class);
+                    if (role == UserRoleEnum.USER.name()) {
+                        if (StringUtils.equals(memo.getUsername(), username)) {
+                            memoRepository.deleteById(id);
+                            return new ResponseDto("댓글 삭제 성공했습니다!!!", HttpStatus.OK);
+                        }
+                    } else {
                         memoRepository.deleteById(id);
-                        return MemoResponseDto.Success(memo);
+                        return new ResponseDto("댓글 삭제 성공했습니다!!!", HttpStatus.OK);
                     }
                 }
             }
-
-            return MemoResponseDto.False();
-
+            return new ResponseDto("댓글 삭제 실패했습니다!!!", HttpStatus.BAD_REQUEST);
         } catch (NullPointerException e) {
-            return MemoResponseDto.False();
+            return new ResponseDto("오류로 실패했습니다!!!", HttpStatus.BAD_REQUEST);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.sparta.hanghaemamo.controller;
 
 import com.sparta.hanghaemamo.dto.MemoRequestDto;
 import com.sparta.hanghaemamo.dto.MemoResponseDto;
+import com.sparta.hanghaemamo.dto.ResponseDto;
 import com.sparta.hanghaemamo.service.MemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,7 @@ public class MemoController {
     }
 
     @DeleteMapping("/memos/{id}")
-    public MemoResponseDto<MemoRequestDto> deleteMemo(@PathVariable Long id, HttpServletRequest request) {
+    public ResponseDto deleteMemo(@PathVariable Long id, HttpServletRequest request) {
         return memoService.delete(id, request);
     }
 }
