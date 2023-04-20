@@ -3,23 +3,30 @@ package com.sparta.hanghaemamo.service;
 import com.sparta.hanghaemamo.dto.MemoRequestDto;
 import com.sparta.hanghaemamo.dto.MemoResponseDto;
 import com.sparta.hanghaemamo.entity.Memo;
+import com.sparta.hanghaemamo.entity.User;
+import com.sparta.hanghaemamo.entity.UserRoleEnum;
 import com.sparta.hanghaemamo.repository.MemoRepository;
+import com.sparta.hanghaemamo.repository.UserRepository;
 import com.sparta.hanghaemamo.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class MemoService {
     private final MemoRepository memoRepository;
+    private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    public static final String AUTHORIZATION_KEY = "auth";
 
 
     //서비스 -> 서버로 가는 dto
@@ -61,17 +68,27 @@ public class MemoService {
             );
 
             String token = jwtUtil.resolveToken(request);
-            Claims claims;
+            Map<String, Object> claimMap = jwtUtil.createClaims(memo);
 
             if (token != null) {
                 if (jwtUtil.validateToken(token)) {
                     claims = jwtUtil.getUserInfoFromToken(token);
-                    if (memo.getUsername().equals(claims.getSubject())) {
+                    if (StringUtils.equals(memo.getUsername(), id)) {
+                        // StringUtils.equals를 쓴 이유는 Null-safe하게 사용하기 위해서 -> Java가 잘못함
+
                         memo.update(requestDto);
                         return MemoResponseDto.Success(memo);
                     }
+                    User user = userRepository.findByUsername(claims.getSubject()).orElseThrow(
+                            () -> new IllegalArgumentException("사용자가 존재하지 않습니다.")
+                    );
+
+                    // 사용자 권한 가져와서 ADMIN 이면 전체 조회, USER 면 본인이 추가한 부분 조회
+                    UserRoleEnum userRoleEnum = user.getRole();
+                    System.out.println("role = " + userRoleEnum);
                 }
             }
+
             return MemoResponseDto.False();
 
         } catch (NullPointerException e) {

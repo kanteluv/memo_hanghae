@@ -20,4 +20,7 @@ public class UserRequestDto {
     @Pattern(regexp =  "/[a-zA-Z0-9]/", message = "password는 소문자, 숫자만 가능합니다.")
     @NotNull(message = "password를 입력해주세요")
     private String password;
+
+    private boolean admin = false;
+    private String adminToken = "";
 }

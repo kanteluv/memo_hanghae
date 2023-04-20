@@ -3,6 +3,7 @@ package com.sparta.hanghaemamo.service;
 import com.sparta.hanghaemamo.dto.UserRequestDto;
 import com.sparta.hanghaemamo.dto.ResponseDto;
 import com.sparta.hanghaemamo.entity.User;
+import com.sparta.hanghaemamo.entity.UserRoleEnum;
 import com.sparta.hanghaemamo.repository.UserRepository;
 import com.sparta.hanghaemamo.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final  UserRepository userRepository;
+    private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private final JwtUtil jwtUtil;
 
     public ResponseDto signup(UserRequestDto requestDto) {
@@ -25,7 +27,15 @@ public class UserService {
             return new ResponseDto("아이디 중복", HttpStatus.BAD_REQUEST);
         }
 
-        User user = new User(requestDto);
+        UserRoleEnum role = UserRoleEnum.USER;
+        if (requestDto.isAdmin()) {
+            if (!requestDto.getAdminToken().equals(ADMIN_TOKEN)) {
+                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+            }
+            role = UserRoleEnum.ADMIN;
+        }
+
+        User user = new User(requestDto, role);
         userRepository.save(user);
 
 
@@ -42,7 +52,7 @@ public class UserService {
 
 
             if (requestDto.getPassword().equals(user.getPassword())) {
-                response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername()));
+                response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
                 return new ResponseDto("성공", HttpStatus.OK);
             }
 

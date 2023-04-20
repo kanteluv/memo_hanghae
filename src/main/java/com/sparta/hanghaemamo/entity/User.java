@@ -5,10 +5,7 @@ import com.sparta.hanghaemamo.dto.UserRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Entity(name="USERS")
@@ -22,9 +19,14 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String password;
 
-    public User(UserRequestDto requestDto) {
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
+
+    public User(UserRequestDto requestDto, UserRoleEnum role) {
         this.username = requestDto.getUsername();
         this.password = requestDto.getPassword();
+        this.role = role;
     }
 
 }

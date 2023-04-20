@@ -1,5 +1,7 @@
 package com.sparta.hanghaemamo.util;
 
+import com.sparta.hanghaemamo.entity.User;
+import com.sparta.hanghaemamo.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
@@ -21,6 +25,7 @@ public class JwtUtil {
 
     // Header 의 Key 값
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String AUTHORIZATION_KEY = "auth";
     // Token 식별자
     public static final String BEARER_PREFIX = "Bearer ";
     // 토큰 만료시간
@@ -49,12 +54,13 @@ public class JwtUtil {
     }
 
     // JWT 생성하기
-    public String createToken(String username) {
+    public String createToken(String username, UserRoleEnum role) {
         Date date = new Date();
+        Map<String, Object> createClaims = createClaims(username, role);
 
         return BEARER_PREFIX
                 + Jwts.builder()
-                .setSubject(username)
+                .claim(AUTHORIZATION_KEY, createClaims)
                 .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                 .signWith(key, signatureAlgorithm)
                 .compact();
@@ -75,6 +81,13 @@ public class JwtUtil {
             log.info("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
         }
         return false;
+    }
+
+    private Map<String, Object> createClaims(String username, UserRoleEnum role) { // payload
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("username", username);
+        claims.put("role", role);
+        return claims;
     }
 
     // JWT 에서 사용자 정보 가져오기(먼저 유효성 검사 후에 사용해야 합니다)
