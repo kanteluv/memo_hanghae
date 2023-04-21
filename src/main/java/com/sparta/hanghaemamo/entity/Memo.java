@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -24,6 +26,11 @@ public class Memo extends Timestamped {
 
     @Column(nullable = false)
     private String contentName;
+
+    @OneToMany(mappedBy = "memo", cascade = CascadeType.ALL, orphanRemoval = true)
+    //cascade 속성은 Memo 엔티티에서 Comment 엔티티를 제거할 때 관련된 Comment 엔티티도 함께 제거됨
+    //orphanRemoval 속성은 Memo 엔티티에서 Comment 엔티티가 제거되면 해당 Comment 엔티티를 DB에서도 제거함
+    private List<Comment> comments = new ArrayList<>();
 
     public Memo(MemoRequestDto requestDto) {
         this.contents = requestDto.getContents();
