@@ -1,6 +1,7 @@
 package com.sparta.hanghaemamo.controller;
 
 import com.sparta.hanghaemamo.dto.*;
+import com.sparta.hanghaemamo.entity.Comment;
 import com.sparta.hanghaemamo.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/{memoId}/comments")
-    public CommentResponseDto<CommentRequestDto> createComment(@PathVariable Long memoId, @RequestBody CommentRequestDto requestDto, HttpServletRequest request) {
+    public CommentResponseDto<Comment> createComment(@PathVariable Long memoId, @RequestBody CommentRequestDto requestDto, HttpServletRequest request) {
         return commentService.createComment(memoId, requestDto, request);
     }
 

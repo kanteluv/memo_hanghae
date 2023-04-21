@@ -4,10 +4,8 @@ import com.sparta.hanghaemamo.dto.MemoRequestDto;
 import com.sparta.hanghaemamo.dto.MemoResponseDto;
 import com.sparta.hanghaemamo.dto.ResponseDto;
 import com.sparta.hanghaemamo.entity.Memo;
-import com.sparta.hanghaemamo.entity.User;
 import com.sparta.hanghaemamo.entity.UserRoleEnum;
 import com.sparta.hanghaemamo.repository.MemoRepository;
-import com.sparta.hanghaemamo.repository.UserRepository;
 import com.sparta.hanghaemamo.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -51,14 +50,15 @@ public class MemoService {
     }
 
     @Transactional(readOnly = true)
-    public MemoResponseDto<MemoRequestDto> getMemos() {
-        List<Memo> memo = memoRepository.findAllMemoAndComments();
+    public MemoResponseDto<Memo> getMemos() {
+        Set<Memo> memo = memoRepository.findAllMemoAndComments();
+
         return MemoResponseDto.Success(memo);
     }
 
     @Transactional(readOnly = true)
     public MemoResponseDto<MemoRequestDto> searchMemos(Long id) {
-        List<Memo> memo = memoRepository.findMemoAndComments(id);
+        Set<Memo> memo = memoRepository.findMemoAndComments(id);
         return MemoResponseDto.Success(memo);
     }
 
@@ -119,7 +119,7 @@ public class MemoService {
                     }
                 }
             }
-            return new ResponseDto("게시글 삭제 실패했습니다!!!", HttpStatus.BAD_REQUEST);
+            return new ResponseDto("토큰이 없어 게시글 삭제 실패했습니다!!!", HttpStatus.BAD_REQUEST);
         } catch (NullPointerException e) {
             return new ResponseDto("오류로 실패했습니다!!!", HttpStatus.BAD_REQUEST);
         }

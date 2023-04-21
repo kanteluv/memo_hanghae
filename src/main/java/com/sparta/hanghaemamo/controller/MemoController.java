@@ -3,12 +3,15 @@ package com.sparta.hanghaemamo.controller;
 import com.sparta.hanghaemamo.dto.MemoRequestDto;
 import com.sparta.hanghaemamo.dto.MemoResponseDto;
 import com.sparta.hanghaemamo.dto.ResponseDto;
+import com.sparta.hanghaemamo.entity.Memo;
 import com.sparta.hanghaemamo.service.MemoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +32,7 @@ public class MemoController {
     }
 
     @GetMapping("/memos")
-    public MemoResponseDto<MemoRequestDto> getMemos() {
+    public MemoResponseDto<Memo> getMemos() {
         return memoService.getMemos();
     }
 

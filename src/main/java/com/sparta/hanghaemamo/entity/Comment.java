@@ -1,5 +1,7 @@
 package com.sparta.hanghaemamo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sparta.hanghaemamo.dto.CommentRequestDto;
 import lombok.Data;
 import lombok.Getter;
@@ -15,11 +17,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Comment extends Timestamped{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "MEMO_ID", nullable = false)
+    @JsonBackReference
     private Memo memo;
 
     @Column(nullable = false)
@@ -30,6 +33,7 @@ public class Comment extends Timestamped{
 
     public Comment(CommentRequestDto commentRequestDto) {
         this.contents = commentRequestDto.getContents();
+        this.username = username;
     }
 
     public void setUsername(String username) {

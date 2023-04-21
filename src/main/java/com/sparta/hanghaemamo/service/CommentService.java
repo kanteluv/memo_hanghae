@@ -28,7 +28,7 @@ public class CommentService {
     public static final String SUBJECT_KEY = "sub";
 
     @Transactional
-    public CommentResponseDto<CommentRequestDto> createComment(Long memoId, CommentRequestDto requestDto, HttpServletRequest request) {
+    public CommentResponseDto<Comment> createComment(Long memoId, CommentRequestDto requestDto, HttpServletRequest request) {
         Memo memo = memoRepository.findById(memoId).orElseThrow(
                 () -> new IllegalArgumentException("존재하지 않는 게시글 입니다")
         );

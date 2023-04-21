@@ -1,5 +1,6 @@
 package com.sparta.hanghaemamo.dto;
 
+import com.sparta.hanghaemamo.entity.Memo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
