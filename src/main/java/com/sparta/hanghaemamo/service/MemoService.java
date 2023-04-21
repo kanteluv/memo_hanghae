@@ -46,19 +46,18 @@ public class MemoService {
 
     @Transactional(readOnly = true)
     public MemoResponseDto<MemoRequestDto> getMemos() {
-        List<Memo> memo = memoRepository.findAllByOrderByModifiedAtDesc();
+        List<Memo> memo = memoRepository.findAllMemoAndComments();
         return MemoResponseDto.Success(memo);
     }
 
     @Transactional(readOnly = true)
     public MemoResponseDto<MemoRequestDto> searchMemos(Long id) {
-        Memo memo = memoRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("아이디가 존재하지 않아요"));
+        List<Memo> memo = memoRepository.findMemoAndComments(id);
         return MemoResponseDto.Success(memo);
     }
 
     @Transactional
     public MemoResponseDto<MemoRequestDto> update(Long id, MemoRequestDto requestDto, HttpServletRequest request) {
-        boolean chk_dto = false;
         try {
             Memo memo = memoRepository.findById(id).orElseThrow(
                     () -> new NullPointerException("존재하지 않는 게시글입니다.")
@@ -103,18 +102,18 @@ public class MemoService {
                     Claims claims = jwtUtil.getUserInfoFromToken(token);
                     String username = claims.get(SUBJECT_KEY, String.class);
                     String role = claims.get(AUTHORIZATION_KEY, String.class);
-                    if (role == UserRoleEnum.USER.name()) {
+                    if (StringUtils.equals(role, UserRoleEnum.USER.name())) {
                         if (StringUtils.equals(memo.getUsername(), username)) {
                             memoRepository.deleteById(id);
-                            return new ResponseDto("댓글 삭제 성공했습니다!!!", HttpStatus.OK);
+                            return new ResponseDto("게시글 삭제 성공했습니다!!!", HttpStatus.OK);
                         }
                     } else {
                         memoRepository.deleteById(id);
-                        return new ResponseDto("댓글 삭제 성공했습니다!!!", HttpStatus.OK);
+                        return new ResponseDto("게시글 삭제 성공했습니다!!!", HttpStatus.OK);
                     }
                 }
             }
-            return new ResponseDto("댓글 삭제 실패했습니다!!!", HttpStatus.BAD_REQUEST);
+            return new ResponseDto("게시글 삭제 실패했습니다!!!", HttpStatus.BAD_REQUEST);
         } catch (NullPointerException e) {
             return new ResponseDto("오류로 실패했습니다!!!", HttpStatus.BAD_REQUEST);
         }

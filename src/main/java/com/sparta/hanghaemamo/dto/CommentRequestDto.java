@@ -6,11 +6,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class CommentRequestDto {
-    private Long id;
     private String contents;
 
-    public CommentRequestDto(Long id, String contents) {
-        this.id = id;
+    public CommentRequestDto(String contents) {
         this.contents = contents;
     }
 }

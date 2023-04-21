@@ -13,18 +13,18 @@ import javax.servlet.http.HttpServletRequest;
 public class CommentController {
     private final CommentService commentService;
 
-//    @PostMapping("/comments")
-//    public CommentResponseDto<CommentRequestDto> createComment(@RequestBody CommentRequestDto requestDto, HttpServletRequest request) {
-//        return CommentService.createComment(requestDto, request);
-//    }
-//
-//    @PutMapping("/comments/{id}")
-//    public CommentResponseDto<CommentRequestDto> updateComment(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, HttpServletRequest request) {
-//        return CommentService.updateComment(id, requestDto, request);
-//    }
-//
-//    @DeleteMapping("/comments/{id}")
-//    public ResponseDto deleteMemo(@PathVariable Long id, HttpServletRequest request) {
-//        return CommentService.delete(id, request);
-//    }
+    @PostMapping("/{memoId}/comments")
+    public CommentResponseDto<CommentRequestDto> createComment(@PathVariable Long memoId, @RequestBody CommentRequestDto requestDto, HttpServletRequest request) {
+        return commentService.createComment(memoId, requestDto, request);
+    }
+
+    @PutMapping("/comments/{id}")
+    public CommentResponseDto<CommentRequestDto> updateComment(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, HttpServletRequest request) {
+        return commentService.updateComment(id, requestDto, request);
+    }
+
+    @DeleteMapping("/comments/{id}")
+    public ResponseDto deleteMemo(@PathVariable Long id, HttpServletRequest request) {
+        return commentService.delete(id, request);
+    }
 }
