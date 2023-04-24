@@ -7,7 +7,9 @@ import com.sparta.hanghaemamo.entity.UserRoleEnum;
 import com.sparta.hanghaemamo.repository.UserRepository;
 import com.sparta.hanghaemamo.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,7 @@ public class UserService {
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
+
 
     public ResponseDto signup(UserRequestDto requestDto) {
 
@@ -43,7 +46,7 @@ public class UserService {
 
         User user = new User(username, password, role);
         userRepository.save(user);
-
+        
 
         return new ResponseDto("Success", HttpStatus.OK);
     }
