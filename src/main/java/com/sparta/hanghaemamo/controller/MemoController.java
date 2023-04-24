@@ -30,7 +30,7 @@ public class MemoController {
 
     //HttpServletRequest 을 서비스단에서가 아니라 컨트롤러단에서만 할수있을까?
     //클라이언트 요청이므로 컨트롤단에서만 처리하고싶다
-    @Secured(UserRoleEnum.Authority.ADMIN)
+//    @Secured(UserRoleEnum.Authority.ADMIN)
     @PostMapping("/memos")
     public MemoResponseDto<MemoRequestDto> createMemo(@RequestBody MemoRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return memoService.createMemo(requestDto, userDetails.getUser());
