@@ -80,24 +80,38 @@ public class MemoService {
 
 
     @Transactional
-    @PostAuthorize("isAuthenticated() and (hasRole('ADMIN') or #user.username == authentication.principal)")
+//    @PostAuthorize("isAuthenticated() and (hasRole('ADMIN') or #user.username == authentication.principal)")
+    //ROLE_USER ROLE_ADMIN
+//    @PreAuthorize("#user.username == principal.username ")
     public MemoResponseDto<MemoRequestDto> update(Long id, MemoRequestDto requestDto, User user) {
         try {
             Memo memo = memoRepository.findById(id).orElseThrow(
                     () -> new NullPointerException("존재하지 않는 게시글입니다.")
             );
 
+            UserRoleEnum userRoleEnum = user.getRole();
 
-//            UserRoleEnum userRoleEnum = user.getRole();
-//
+            switch (userRoleEnum) {
+                case USER:
+                    if (StringUtils.equals(memo.getUsername(), user.getUsername())) {
+                        memo.update(requestDto);
+                        return MemoResponseDto.Success(memo);
+                    }
+                    break;
+                case ADMIN:
+                    memo.update(requestDto);
+                    return MemoResponseDto.Success(memo);
+            }
+
+            return MemoResponseDto.False();
+
 //            if (userRoleEnum == UserRoleEnum.USER) {
 //                if (StringUtils.equals(memo.getUsername(), user.getUsername())) {
 //                    memo.update(requestDto);
 //                    return MemoResponseDto.Success(memo);
 //                }
 //            }
-            memo.update(requestDto);
-            return MemoResponseDto.Success(memo);
+//
 
 //            String token = jwtUtil.resolveToken(request);
 //
@@ -134,14 +148,31 @@ public class MemoService {
 
             UserRoleEnum userRoleEnum = user.getRole();
 
-            if (userRoleEnum == UserRoleEnum.USER) {
-                if (StringUtils.equals(memo.getUsername(), user.getUsername())) {
+            switch (userRoleEnum) {
+                case USER:
+                    if (StringUtils.equals(memo.getUsername(), user.getUsername())) {
+                        memoRepository.deleteById(id);
+                        return new ResponseDto("게시글 삭제 성공했습니다!!!", HttpStatus.OK);
+                    }
+                    break;
+                case ADMIN:
                     memoRepository.deleteById(id);
                     return new ResponseDto("게시글 삭제 성공했습니다!!!", HttpStatus.OK);
-                }
             }
-            memoRepository.deleteById(id);
-            return new ResponseDto("게시글 삭제 성공했습니다!!!", HttpStatus.OK);
+
+            return new ResponseDto("게시글 삭제 실패했습니다ㅠㅠㅠ", HttpStatus.BAD_REQUEST);
+
+
+//            UserRoleEnum userRoleEnum = user.getRole();
+//
+//            if (userRoleEnum == UserRoleEnum.USER) {
+//                if (StringUtils.equals(memo.getUsername(), user.getUsername())) {
+//                    memoRepository.deleteById(id);
+//                    return new ResponseDto("게시글 삭제 성공했습니다!!!", HttpStatus.OK);
+//                }
+//            }
+//            memoRepository.deleteById(id);
+//            return new ResponseDto("게시글 삭제 성공했습니다!!!", HttpStatus.OK);
 
 //            String token = jwtUtil.resolveToken(request);
 

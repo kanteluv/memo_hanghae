@@ -35,11 +35,13 @@ public class MemoController {
     //클라이언트 요청이므로 컨트롤단에서만 처리하고싶다
 //    @Secured(UserRoleEnum.Authority.ADMIN)
     @PostMapping("/memos")
+    @PreAuthorize("isAuthenticated()")
     public MemoResponseDto<MemoRequestDto> createMemo(@RequestBody MemoRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return memoService.createMemo(requestDto, userDetails.getUser());
     }
 
     @GetMapping("/memos")
+    @PreAuthorize("isAuthenticated()")
     public MemoResponseDto<Memo> getMemos() {
         return memoService.getMemos();
     }
@@ -50,12 +52,14 @@ public class MemoController {
     }
 
     @PutMapping("/memos/{id}")
-    @PreAuthorize("isAuthenticated() and (hasRole('ADMIN') or #userDetails.username == authentication.principal)")
+//    @PreAuthorize("isAuthenticated() and (hasRole('ADMIN') or (#userDetails.username == authentication.name))")
+    @PreAuthorize("isAuthenticated() or hasRole('ADMIN')")
     public MemoResponseDto<MemoRequestDto> updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return memoService.update(id, requestDto, userDetails.getUser());
     }
 
     @DeleteMapping("/memos/{id}")
+    @PreAuthorize("isAuthenticated() or hasRole('ADMIN')")
     public ResponseDto deleteMemo(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return memoService.delete(id, userDetails.getUser());
     }
