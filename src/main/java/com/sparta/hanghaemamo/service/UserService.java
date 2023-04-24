@@ -68,6 +68,7 @@ public class UserService {
 
             // 비밀번호 확인
             if(passwordEncoder.matches(password, user.getPassword())){
+                response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
                 return new ResponseDto("성공", HttpStatus.OK);
             }
 
