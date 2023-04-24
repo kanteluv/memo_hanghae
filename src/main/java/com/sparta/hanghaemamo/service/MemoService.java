@@ -4,6 +4,7 @@ import com.sparta.hanghaemamo.dto.MemoRequestDto;
 import com.sparta.hanghaemamo.dto.MemoResponseDto;
 import com.sparta.hanghaemamo.dto.ResponseDto;
 import com.sparta.hanghaemamo.entity.Memo;
+import com.sparta.hanghaemamo.entity.User;
 import com.sparta.hanghaemamo.entity.UserRoleEnum;
 import com.sparta.hanghaemamo.repository.MemoRepository;
 import com.sparta.hanghaemamo.util.JwtUtil;
@@ -35,18 +36,24 @@ public class MemoService {
     //제너릭 <?> 이면 컴파일시에 맞는 타입 체크를 못하기때문에 의미가 없다
     //엔티티가 리턴되고 있는데 open session in view 의 관점에서 생각해보라
     //entity -> dto 로 검색해보자
+    // User Entity를 가져올 수 밖에 읎습니다...
     @Transactional
-    public MemoResponseDto<MemoRequestDto> createMemo(MemoRequestDto requestDto, HttpServletRequest request) {
-        Memo memo = new Memo(requestDto);
-        String chkToken = jwtUtil.resolveToken(request);
-        Claims test = jwtUtil.getUserInfoFromToken(chkToken);
-        memo.setUsername(test.getSubject());
+    public MemoResponseDto<MemoRequestDto> createMemo(MemoRequestDto requestDto, User user) {
+        System.out.println("ProductService.createProduct");
+        System.out.println("user.getUsername() = " + user.getUsername());
 
-        if (jwtUtil.validateToken(chkToken)) {
-            memoRepository.save(memo);
-            return MemoResponseDto.Success(memo);
-        } else
-            return MemoResponseDto.False();
+//        Memo memo = new Memo(requestDto);
+//        String chkToken = jwtUtil.resolveToken(request);
+//        Claims test = jwtUtil.getUserInfoFromToken(chkToken);
+//        memo.setUsername(test.getSubject());
+//
+//        if (jwtUtil.validateToken(chkToken)) {
+//            memoRepository.save(memo);
+//            return MemoResponseDto.Success(memo);
+//        } else
+//            return MemoResponseDto.False();
+
+        Memo memo = memoRepository.saveAndFlush(new Memo(requestDto, user.getUsername()));
     }
 
     @Transactional(readOnly = true)

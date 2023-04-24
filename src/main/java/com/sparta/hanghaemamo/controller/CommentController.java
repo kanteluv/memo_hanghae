@@ -2,8 +2,10 @@ package com.sparta.hanghaemamo.controller;
 
 import com.sparta.hanghaemamo.dto.*;
 import com.sparta.hanghaemamo.entity.Comment;
+import com.sparta.hanghaemamo.security.UserDetailsImpl;
 import com.sparta.hanghaemamo.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,4 +30,10 @@ public class CommentController {
     public ResponseDto deleteMemo(@PathVariable Long id, HttpServletRequest request) {
         return commentService.delete(id, request);
     }
+
+//    @GetMapping("/user-info")
+//    @ResponseBody
+//    public String getUserName(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        return userDetails.getUsername();
+//    }
 }

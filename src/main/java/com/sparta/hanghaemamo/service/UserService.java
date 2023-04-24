@@ -8,6 +8,7 @@ import com.sparta.hanghaemamo.repository.UserRepository;
 import com.sparta.hanghaemamo.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,8 +20,13 @@ public class UserService {
     private final  UserRepository userRepository;
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
     public ResponseDto signup(UserRequestDto requestDto) {
+
+        String username = requestDto.getUsername();
+        String password = passwordEncoder.encode(requestDto.getPassword());
+
         Optional<User> found = userRepository.findById(requestDto.getUsername());
 
         if (found.isPresent()) {
@@ -35,28 +41,38 @@ public class UserService {
             role = UserRoleEnum.ADMIN;
         }
 
-        User user = new User(requestDto, role);
+        User user = new User(username, password, role);
         userRepository.save(user);
 
 
-        ResponseDto responseDto = new ResponseDto("Success", HttpStatus.OK);
-
-        return responseDto;
+        return new ResponseDto("Success", HttpStatus.OK);
     }
 
     public ResponseDto login(UserRequestDto requestDto, HttpServletResponse response) {
+
+        String username = requestDto.getUsername();
+        String password = requestDto.getPassword();
+
         try {
             User user = userRepository.findById(requestDto.getUsername()).orElseThrow(
                     () -> new IllegalArgumentException("없는 ID 입니다.")
             );
 
 
-            if (requestDto.getPassword().equals(user.getPassword())) {
-                response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+//            if (requestDto.getPassword().equals(user.getPassword())) {
+//                response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
+//                return new ResponseDto("성공", HttpStatus.OK);
+//            }
+//
+//            return new ResponseDto("비밀번호가 틀렸습니다.", HttpStatus.BAD_REQUEST);
+
+            // 비밀번호 확인
+            if(passwordEncoder.matches(password, user.getPassword())){
                 return new ResponseDto("성공", HttpStatus.OK);
             }
 
             return new ResponseDto("비밀번호가 틀렸습니다.", HttpStatus.BAD_REQUEST);
+
         } catch (IllegalArgumentException e) {
             return new ResponseDto(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
