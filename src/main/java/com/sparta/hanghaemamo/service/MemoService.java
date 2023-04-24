@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -77,22 +78,24 @@ public class MemoService {
         return MemoResponseDto.Success(memo);
     }
 
-    //@PreAuthorize("hasRole('ADMIN') or #memo.username == authentication.principal")
+
     @Transactional
+    @PostAuthorize("isAuthenticated() and (hasRole('ADMIN') or #user.username == authentication.principal)")
     public MemoResponseDto<MemoRequestDto> update(Long id, MemoRequestDto requestDto, User user) {
         try {
             Memo memo = memoRepository.findById(id).orElseThrow(
                     () -> new NullPointerException("존재하지 않는 게시글입니다.")
             );
 
-            UserRoleEnum userRoleEnum = user.getRole();
 
-            if (userRoleEnum == UserRoleEnum.USER) {
-                if (StringUtils.equals(memo.getUsername(), user.getUsername())) {
-                    memo.update(requestDto);
-                    return MemoResponseDto.Success(memo);
-                }
-            }
+//            UserRoleEnum userRoleEnum = user.getRole();
+//
+//            if (userRoleEnum == UserRoleEnum.USER) {
+//                if (StringUtils.equals(memo.getUsername(), user.getUsername())) {
+//                    memo.update(requestDto);
+//                    return MemoResponseDto.Success(memo);
+//                }
+//            }
             memo.update(requestDto);
             return MemoResponseDto.Success(memo);
 
@@ -117,7 +120,7 @@ public class MemoService {
 //            }
 //            return MemoResponseDto.False();
 
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             return MemoResponseDto.False();
         }
     }

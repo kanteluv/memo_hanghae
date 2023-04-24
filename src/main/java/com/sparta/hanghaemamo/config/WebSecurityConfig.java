@@ -1,7 +1,6 @@
 package com.sparta.hanghaemamo.config;
 
 import com.sparta.hanghaemamo.jwt.JwtAuthFilter;
-import com.sparta.hanghaemamo.security.CustomSecurityFilter;
 import com.sparta.hanghaemamo.security.UserDetailsServiceImpl;
 import com.sparta.hanghaemamo.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
-@EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
+@EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig {
 
     private final UserDetailsServiceImpl userDetailsService;

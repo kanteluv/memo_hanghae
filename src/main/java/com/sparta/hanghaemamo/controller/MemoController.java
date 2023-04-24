@@ -10,12 +10,15 @@ import com.sparta.hanghaemamo.service.MemoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+
 
 @RestController
 @RequiredArgsConstructor
@@ -47,6 +50,7 @@ public class MemoController {
     }
 
     @PutMapping("/memos/{id}")
+    @PreAuthorize("isAuthenticated() and (hasRole('ADMIN') or #userDetails.username == authentication.principal)")
     public MemoResponseDto<MemoRequestDto> updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return memoService.update(id, requestDto, userDetails.getUser());
     }
