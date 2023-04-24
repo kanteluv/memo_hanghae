@@ -2,6 +2,7 @@ package com.sparta.hanghaemamo.entity;
 
 
 import com.sparta.hanghaemamo.dto.UserRequestDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,9 +24,9 @@ public class User extends Timestamped {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    public User(UserRequestDto requestDto, UserRoleEnum role) {
-        this.username = requestDto.getUsername();
-        this.password = requestDto.getPassword();
+    public User(String username, String password, UserRoleEnum role) {
+        this.username = username;
+        this.password = password;
         this.role = role;
     }
 
