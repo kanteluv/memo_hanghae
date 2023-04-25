@@ -62,13 +62,6 @@ public class UserService {
             );
 
 
-//            if (requestDto.getPassword().equals(user.getPassword())) {
-//                response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));
-//                return new ResponseDto("성공", HttpStatus.OK);
-//            }
-//
-//            return new ResponseDto("비밀번호가 틀렸습니다.", HttpStatus.BAD_REQUEST);
-
             // 비밀번호 확인
             if(passwordEncoder.matches(password, user.getPassword())){
                 response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(user.getUsername(), user.getRole()));

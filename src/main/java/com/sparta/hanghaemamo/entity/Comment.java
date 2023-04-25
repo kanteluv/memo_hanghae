@@ -22,7 +22,6 @@ public class Comment extends Timestamped{
 
     @ManyToOne
     @JoinColumn(name = "MEMO_ID", nullable = false)
-    @JsonBackReference
     private Memo memo;
 
     @Column(nullable = false)

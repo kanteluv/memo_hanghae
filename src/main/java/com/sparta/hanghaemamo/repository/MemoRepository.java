@@ -11,7 +11,10 @@ import java.util.Set;
 
 public interface MemoRepository extends JpaRepository<Memo, Long> {
 
-    List<MemoCommentResponseDto> findAllOrderByModifiedAtDesc();
+    @Query("select m from Memo m order by m.modifiedAt DESC")
+    List<Memo> allMemoList();
+
+    //List<MemoCommentResponseDto> findAllOrderByModifiedAtDesc();
     //    @Query("select m, c from Memo m LEFT JOIN Comment c On m.id = c.memo.id ORDER BY m.modifiedAt DESC ")
 //    @Query("select m, c from Memo m LEFT JOIN fetch Comment c On m.id = c.memo.id ORDER BY m.modifiedAt DESC ")
 //    Set<Memo> findAllMemoAndComments();

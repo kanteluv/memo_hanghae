@@ -1,9 +1,6 @@
 package com.sparta.hanghaemamo.controller;
 
-import com.sparta.hanghaemamo.dto.MemoCommentResponseDto;
-import com.sparta.hanghaemamo.dto.MemoRequestDto;
-import com.sparta.hanghaemamo.dto.MemoResponseDto;
-import com.sparta.hanghaemamo.dto.ResponseDto;
+import com.sparta.hanghaemamo.dto.*;
 import com.sparta.hanghaemamo.entity.Memo;
 import com.sparta.hanghaemamo.entity.UserRoleEnum;
 import com.sparta.hanghaemamo.security.UserDetailsImpl;
@@ -41,26 +38,27 @@ public class MemoController {
         return memoService.createMemo(requestDto, userDetails.getUser());
     }
 
-//    @GetMapping("/memos")
-//    @PreAuthorize("isAuthenticated()")
-//    public MemoResponseDto<List<MemoCommentResponseDto>> getMemos() {
-//        return memoService.getMemos();
-//    }
+    @PostMapping("/memos/love/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseDto createMemoLove(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return memoService.createMemoLove(id, userDetails.getUser());
+    }
+
+
 
     @GetMapping("/memos")
     @PreAuthorize("isAuthenticated()")
-    public MemoCommentResponseDto getMemos() {
+    public List<MemoCommentResponseDto> getMemos() {
         return memoService.getMemos();
     }
 
 
-//    @GetMapping("/memos/{id}")
-//    public MemoResponseDto<List<MemoCommentResponseDto>> searchMemos(@PathVariable Long id) {
-////        return memoService.searchMemos(id);
-//    }
+    @GetMapping("/memos/{id}")
+    public MemoCommentResponseDto getMemo(@PathVariable Long id) {
+        return memoService.getMemo(id);
+    }
 
     @PutMapping("/memos/{id}")
-//    @PreAuthorize("isAuthenticated() and (hasRole('ADMIN') or (#userDetails.username == authentication.name))")
     @PreAuthorize("isAuthenticated() or hasRole('ADMIN')")
     public MemoResponseDto<MemoRequestDto> updateMemo(@PathVariable Long id, @RequestBody MemoRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return memoService.update(id, requestDto, userDetails.getUser());
