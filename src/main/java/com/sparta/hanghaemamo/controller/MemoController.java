@@ -41,16 +41,23 @@ public class MemoController {
         return memoService.createMemo(requestDto, userDetails.getUser());
     }
 
+//    @GetMapping("/memos")
+//    @PreAuthorize("isAuthenticated()")
+//    public MemoResponseDto<List<MemoCommentResponseDto>> getMemos() {
+//        return memoService.getMemos();
+//    }
+
     @GetMapping("/memos")
     @PreAuthorize("isAuthenticated()")
-    public MemoResponseDto<List<MemoCommentResponseDto>> getMemos() {
+    public MemoCommentResponseDto getMemos() {
         return memoService.getMemos();
     }
 
-    @GetMapping("/memos/{id}")
-    public MemoResponseDto<List<MemoCommentResponseDto>> searchMemos(@PathVariable Long id) {
-        return memoService.searchMemos(id);
-    }
+
+//    @GetMapping("/memos/{id}")
+//    public MemoResponseDto<List<MemoCommentResponseDto>> searchMemos(@PathVariable Long id) {
+////        return memoService.searchMemos(id);
+//    }
 
     @PutMapping("/memos/{id}")
 //    @PreAuthorize("isAuthenticated() and (hasRole('ADMIN') or (#userDetails.username == authentication.name))")

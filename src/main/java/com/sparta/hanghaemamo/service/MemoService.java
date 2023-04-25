@@ -4,6 +4,7 @@ import com.sparta.hanghaemamo.dto.MemoCommentResponseDto;
 import com.sparta.hanghaemamo.dto.MemoRequestDto;
 import com.sparta.hanghaemamo.dto.MemoResponseDto;
 import com.sparta.hanghaemamo.dto.ResponseDto;
+import com.sparta.hanghaemamo.entity.Comment;
 import com.sparta.hanghaemamo.entity.Memo;
 import com.sparta.hanghaemamo.entity.User;
 import com.sparta.hanghaemamo.entity.UserRoleEnum;
@@ -13,6 +14,7 @@ import com.sparta.hanghaemamo.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -36,6 +38,7 @@ public class MemoService {
     private final JwtUtil jwtUtil;
     public static final String AUTHORIZATION_KEY = "auth";
     public static final String SUBJECT_KEY = "sub";
+    private final CommentService commentService;
 
 
     //서비스 -> 서버로 가는 dto
@@ -66,20 +69,33 @@ public class MemoService {
         return MemoResponseDto.Success(memo);
     }
 
-    @Transactional(readOnly = true)
-    public MemoResponseDto<List<MemoCommentResponseDto>> getMemos() {
-//        Set<Memo> memo = memoRepository.findAllMemoAndComments();
-        List<MemoCommentResponseDto> memo = memoRepository.findCommentsAndMemos();
+//    @Transactional(readOnly = true)
+//    public MemoResponseDto<List<MemoCommentResponseDto>> getMemos() {
+////        Set<Memo> memo = memoRepository.findAllMemoAndComments();
+//        List<MemoCommentResponseDto> memo = memoRepository.findCommentsAndMemos();
+//
+//        return MemoResponseDto.Success(memo);
+//    }
 
-        return MemoResponseDto.Success(memo);
+    @Transactional(readOnly = true)
+    public List<MemoCommentResponseDto> getMemos() {
+//        Memo memo = memoRepository.findById().orElseThrow(
+//                () -> new NullPointerException("존재하지 않는 게시글입니다.")
+//        );
+        List<Comment> comments = commentService.getAllComments();
+//        List<MemoCommentResponseDto> test = memoRepository.findAll(Sort.by(Sort.Direction.DESC, "ModifiedAt"));
+//        List<MemoCommentResponseDto> commentsAndMemo = memoRepository.findAllOrderByModifiedAtDesc();
+//        return new MemoCommentResponseDto(memo.getId(), memo.getUsername(), memo.getContents(), memo.getContentName(), comments);
     }
 
-    @Transactional(readOnly = true)
-    public MemoResponseDto<List<MemoCommentResponseDto>> searchMemos(Long id) {
-//        Set<Memo> memo = memoRepository.findMemoAndComments(id);
-        List<MemoCommentResponseDto> memo = memoRepository.findCommentAndMemo(id);
-        return MemoResponseDto.Success(memo);
-    }
+
+
+//    @Transactional(readOnly = true)
+//    public MemoResponseDto<List<MemoCommentResponseDto>> searchMemos(Long id) {
+////        Set<Memo> memo = memoRepository.findMemoAndComments(id);
+//        List<MemoCommentResponseDto> memo = memoRepository.findCommentAndMemo(id);
+//        return MemoResponseDto.Success(memo);
+//    }
 
 
     @Transactional
