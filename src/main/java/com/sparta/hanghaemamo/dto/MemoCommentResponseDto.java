@@ -2,16 +2,19 @@ package com.sparta.hanghaemamo.dto;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sparta.hanghaemamo.entity.Comment;
+import com.sparta.hanghaemamo.entity.Memo;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-@NoArgsConstructor
 public class MemoCommentResponseDto {
     private final Long id;
 

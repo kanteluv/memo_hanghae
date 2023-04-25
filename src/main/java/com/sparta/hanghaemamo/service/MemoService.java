@@ -69,12 +69,23 @@ public class MemoService {
         return MemoResponseDto.Success(memo);
     }
 
-    @Transactional(readOnly = true)
-    public MemoResponseDto<List<MemoCommentResponseDto>> getMemos() {
-//        Set<Memo> memo = memoRepository.findAllMemoAndComments();
-        List<MemoCommentResponseDto> memo = memoRepository.findCommentsAndMemos();
+//    @Transactional(readOnly = true)
+//    public MemoResponseDto<List<MemoCommentResponseDto>> getMemos() {
+////        Set<Memo> memo = memoRepository.findAllMemoAndComments();
+//        List<MemoCommentResponseDto> memo = memoRepository.findCommentsAndMemos();
+//
+//        return MemoResponseDto.Success(memo);
+//    }
 
-        return MemoResponseDto.Success(memo);
+    @Transactional(readOnly = true)
+    public List<MemoCommentResponseDto> getMemos() {
+//        Memo memo = memoRepository.findById().orElseThrow(
+//                () -> new NullPointerException("존재하지 않는 게시글입니다.")
+//        );
+        List<Comment> comments = commentService.getAllComments();
+//        List<MemoCommentResponseDto> test = memoRepository.findAll(Sort.by(Sort.Direction.DESC, "ModifiedAt"));
+//        List<MemoCommentResponseDto> commentsAndMemo = memoRepository.findAllOrderByModifiedAtDesc();
+//        return new MemoCommentResponseDto(memo.getId(), memo.getUsername(), memo.getContents(), memo.getContentName(), comments);
     }
 
 
