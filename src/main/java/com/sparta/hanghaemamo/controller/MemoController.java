@@ -1,5 +1,6 @@
 package com.sparta.hanghaemamo.controller;
 
+import com.sparta.hanghaemamo.dto.MemoCommentResponseDto;
 import com.sparta.hanghaemamo.dto.MemoRequestDto;
 import com.sparta.hanghaemamo.dto.MemoResponseDto;
 import com.sparta.hanghaemamo.dto.ResponseDto;
@@ -42,12 +43,12 @@ public class MemoController {
 
     @GetMapping("/memos")
     @PreAuthorize("isAuthenticated()")
-    public MemoResponseDto<Memo> getMemos() {
+    public MemoResponseDto<List<MemoCommentResponseDto>> getMemos() {
         return memoService.getMemos();
     }
 
     @GetMapping("/memos/{id}")
-    public MemoResponseDto<MemoRequestDto> searchMemos(@PathVariable Long id) {
+    public MemoResponseDto<List<MemoCommentResponseDto>> searchMemos(@PathVariable Long id) {
         return memoService.searchMemos(id);
     }
 

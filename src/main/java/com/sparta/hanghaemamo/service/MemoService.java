@@ -1,5 +1,6 @@
 package com.sparta.hanghaemamo.service;
 
+import com.sparta.hanghaemamo.dto.MemoCommentResponseDto;
 import com.sparta.hanghaemamo.dto.MemoRequestDto;
 import com.sparta.hanghaemamo.dto.MemoResponseDto;
 import com.sparta.hanghaemamo.dto.ResponseDto;
@@ -66,15 +67,17 @@ public class MemoService {
     }
 
     @Transactional(readOnly = true)
-    public MemoResponseDto<Memo> getMemos() {
-        Set<Memo> memo = memoRepository.findAllMemoAndComments();
+    public MemoResponseDto<List<MemoCommentResponseDto>> getMemos() {
+//        Set<Memo> memo = memoRepository.findAllMemoAndComments();
+        List<MemoCommentResponseDto> memo = memoRepository.findCommentsAndMemos();
 
         return MemoResponseDto.Success(memo);
     }
 
     @Transactional(readOnly = true)
-    public MemoResponseDto<MemoRequestDto> searchMemos(Long id) {
-        Set<Memo> memo = memoRepository.findMemoAndComments(id);
+    public MemoResponseDto<List<MemoCommentResponseDto>> searchMemos(Long id) {
+//        Set<Memo> memo = memoRepository.findMemoAndComments(id);
+        List<MemoCommentResponseDto> memo = memoRepository.findCommentAndMemo(id);
         return MemoResponseDto.Success(memo);
     }
 
