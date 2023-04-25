@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -106,5 +107,13 @@ public class CommentService {
         } catch (NullPointerException e) {
             return new ResponseDto("오류로 실패했습니다!!!", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    public List<Comment> getComments(Long memoId){
+        return commentRepository.findAllByMemoId(memoId);
+    }
+
+    public List<Comment> getAllComments(){
+        return commentRepository.findAll();
     }
 }

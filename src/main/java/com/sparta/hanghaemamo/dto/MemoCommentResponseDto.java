@@ -13,21 +13,21 @@ import java.util.stream.Collectors;
 @Getter
 @NoArgsConstructor
 public class MemoCommentResponseDto {
-    private Long id;
+    private final Long id;
 
-    private String username;
+    private final String username;
 
-    private String contents;
+    private final String contents;
 
-    private String contentName;
+    private final String contentName;
 
-    private Comment comments;
+    private final List<Comment> comments;
 
-    public MemoCommentResponseDto(Long id, String username, String contents, String contentName, Comment comments) {
-        this.id = id;
-        this.username = username;
-        this.contents = contents;
-        this.contentName = contentName;
+    public MemoCommentResponseDto(Memo memo, List<Comment> comments) {
+        this.id = memo.getId();
+        this.username = memo.getUsername();
+        this.contents = memo.getContents();
+        this.contentName = memo.getContentName();
         this.comments = comments;
     }
 }
