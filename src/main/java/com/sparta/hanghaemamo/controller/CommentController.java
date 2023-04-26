@@ -5,6 +5,7 @@ import com.sparta.hanghaemamo.entity.Comment;
 import com.sparta.hanghaemamo.security.UserDetailsImpl;
 import com.sparta.hanghaemamo.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,23 +18,27 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping("/{memoId}/comments")
-    public CommentResponseDto<Comment> createComment(@PathVariable Long memoId, @RequestBody CommentRequestDto requestDto, HttpServletRequest request) {
-        return commentService.createComment(memoId, requestDto, request);
+    @PreAuthorize("isAuthenticated()")
+    public CommentResponseDto<Comment> createComment(@PathVariable Long memoId, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.createComment(memoId, requestDto, userDetails.getUser());
+    }
+
+    @PostMapping("/comments/love/{commentId}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseDto createCommentLove(@PathVariable Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.createCommentLove(commentId, userDetails.getUser());
     }
 
     @PutMapping("/comments/{id}")
-    public CommentResponseDto<CommentRequestDto> updateComment(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, HttpServletRequest request) {
-        return commentService.updateComment(id, requestDto, request);
+    @PreAuthorize("isAuthenticated()")
+    public CommentResponseDto<CommentRequestDto> updateComment(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.updateComment(id, requestDto, userDetails.getUser());
     }
 
     @DeleteMapping("/comments/{id}")
-    public ResponseDto deleteMemo(@PathVariable Long id, HttpServletRequest request) {
-        return commentService.delete(id, request);
+    @PreAuthorize("isAuthenticated()")
+    public ResponseDto deleteMemo(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.delete(id, userDetails.getUser());
     }
 
-//    @GetMapping("/user-info")
-//    @ResponseBody
-//    public String getUserName(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-//        return userDetails.getUsername();
-//    }
 }

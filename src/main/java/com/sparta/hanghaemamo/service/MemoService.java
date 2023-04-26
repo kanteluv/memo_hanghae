@@ -41,7 +41,10 @@ public class MemoService {
 
         Memo memo = new Memo(requestDto);
         memo.setUsername(user.getUsername());
+        Long loveCnt = 0L;
+        memo.setLoveCnt(loveCnt);
         memoRepository.saveAndFlush(memo);
+
         return MemoResponseDto.Success(memo);
     }
 
@@ -99,7 +102,7 @@ public class MemoService {
 
         List<Memo> memoList = memoRepository.allMemoList();
         for(Memo memo : memoList){
-            List<Comment> comments = commentService.getComments(memo.getId());
+            List<WithoutMemoResponseDto> comments = commentService.getComments(memo.getId());
             Long loveCnt = memoLoveRepository.getLoveCnt(memo.getId());
             MemoCommentResponseDto memoCommentResponseDto = new MemoCommentResponseDto(memo, comments, loveCnt);
             commentsAndMemo.add(memoCommentResponseDto);
@@ -109,11 +112,11 @@ public class MemoService {
 
 
     @Transactional(readOnly = true)
-    public MemoCommentResponseDto getMemo(Long id) {
+    public MemoCommentResponseDto searchMemo(Long id) {
         Memo memo = memoRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("존재하지 않는 게시글입니다.")
         );
-        List<Comment> comments = commentService.getComments(id);
+        List<WithoutMemoResponseDto> comments = commentService.getComments(id);
         Long loveCnt = memoLoveRepository.getLoveCnt(id);
         return new MemoCommentResponseDto(memo, comments, loveCnt);
     }

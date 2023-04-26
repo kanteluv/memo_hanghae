@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api")
@@ -44,8 +43,6 @@ public class MemoController {
         return memoService.createMemoLove(id, userDetails.getUser());
     }
 
-
-
     @GetMapping("/memos")
     @PreAuthorize("isAuthenticated()")
     public List<MemoCommentResponseDto> getMemos() {
@@ -54,8 +51,8 @@ public class MemoController {
 
 
     @GetMapping("/memos/{id}")
-    public MemoCommentResponseDto getMemo(@PathVariable Long id) {
-        return memoService.getMemo(id);
+    public MemoCommentResponseDto searchMemo(@PathVariable Long id) {
+        return memoService.searchMemo(id);
     }
 
     @PutMapping("/memos/{id}")

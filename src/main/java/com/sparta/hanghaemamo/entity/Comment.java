@@ -3,10 +3,8 @@ package com.sparta.hanghaemamo.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sparta.hanghaemamo.dto.CommentRequestDto;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.*;
 
@@ -29,6 +27,8 @@ public class Comment extends Timestamped{
 
     @Column(nullable = false)
     private String username;
+
+    private Long loveCnt;
 
     public Comment(CommentRequestDto commentRequestDto) {
         this.contents = commentRequestDto.getContents();

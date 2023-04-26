@@ -14,14 +14,22 @@ public class CommentLove {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "COMMENT_ID", nullable = false)
-    private Comment comment;
+    @Column(nullable = false)
+    private Long commentId;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID", nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private String username;
 
     @Column(nullable = false)
     private boolean love;
+
+    public CommentLove(Long commentId, String username, boolean love) {
+        this.commentId = commentId;
+        this.username = username;
+        this.love = love;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 }

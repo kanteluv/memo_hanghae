@@ -28,6 +28,8 @@ public class Memo extends Timestamped {
     @Column(nullable = false)
     private String contentName;
 
+    private Long loveCnt;
+
 //    @OneToMany(mappedBy = "memo", cascade = CascadeType.ALL, orphanRemoval = true)
 //    @OrderBy("modifiedAt DESC")
 //    @JsonManagedReference

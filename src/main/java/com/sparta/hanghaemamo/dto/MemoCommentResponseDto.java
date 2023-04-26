@@ -24,16 +24,18 @@ public class MemoCommentResponseDto {
 
     private final String contentName;
 
-    private final List<Comment> comments;
-
     private final Long loveCnt;
 
-    public MemoCommentResponseDto(Memo memo, List<Comment> comments, Long loveCnt) {
+    private final List<WithoutMemoResponseDto> comments;
+
+
+
+    public MemoCommentResponseDto(Memo memo, List<WithoutMemoResponseDto> comments, Long loveCnt) {
         this.id = memo.getId();
         this.username = memo.getUsername();
         this.contents = memo.getContents();
         this.contentName = memo.getContentName();
-        this.comments = comments;
         this.loveCnt = loveCnt;
+        this.comments = comments;
     }
 }
